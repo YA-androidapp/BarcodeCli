@@ -82,7 +82,24 @@
                     streaming = true;
                 },
                 function (err) {
-                    console.log("The following error occured: " + err);
+                    if (err.toString().indexOf('OverconstrainedError') != -1) {
+                        navigator.getUserMedia({
+                                video: true,
+                                audio: true
+                            },
+                            function (localMediaStream) {
+                                video.src = window.URL.createObjectURL(localMediaStream);
+                                video.play();
+                                draw();
+                                streaming = true;
+                            },
+                            function (err) {
+                                console.log("The following error occured: " + err);
+                            }
+                        );
+                    } else {
+                        console.log("The following error occured: " + err);
+                    }
                 }
             );
         } else {
