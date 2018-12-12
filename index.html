@@ -2,20 +2,125 @@
 <html lang="en">
 
 <head>
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
-
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <title>Barcode</title>
+
     <script src="js/exif.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
 </head>
 
 <body>
-    <canvas id="videoCanvas" width="320" height="240">
-    </canvas>
-    <button id="decode" onclick="Decode()">Start decoding</button>
-    <button id="stopDecode" onclick="StopDecode()">Stop decoding</button>
-    <p id="Result"></p>
+    <header>
+        <div class="collapse bg-dark" id="navbarHeader">
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-8 col-md-7 py-4">
+                        <h4 class="text-white">About</h4>
+                        <p class="text-muted">BarcodeCli...</p>
+                    </div>
+                    <div class="col-sm-4 offset-md-1 py-4">
+                        <h4 class="text-white">Contact</h4>
+                        <ul class="list-unstyled">
+                            <li><a href="#" class="text-white">Follow on Twitter</a></li>
+                            <li><a href="#" class="text-white">Like on Facebook</a></li>
+                            <li><a href="#" class="text-white">Email me</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="navbar navbar-dark bg-dark box-shadow">
+            <div class="container d-flex justify-content-between">
+                <a href="#" class="navbar-brand d-flex align-items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mr-2">
+                        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
+                        <circle cx="12" cy="13" r="4"></circle>
+                    </svg>
+                    <strong>BarcodeCli</strong>
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarHeader"
+                    aria-controls="navbarHeader" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+        </div>
+    </header>
+    <main role="main">
+        <section class="jumbotron text-center">
+            <div class="container">
+                <canvas id="videoCanvas" width="640" height="480"></canvas>
+            </div>
+        </section>
+        <div class="py-5 bg-light">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-body">
+                                <p class="card-text">Parameter</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <p id="Result"></p>
+                                    <form>
+                                        <input type="text" id="idkey" name="idkey" value="id" placeholder="ID key" />
+                                        <input type="text" id="idval" name="idval" value="" placeholder="ID value" />
+                                        <input type="text" id="pwkey" name="pwkey" value="pw" placeholder="PW key" />
+                                        <input type="text" id="pwval" name="pwval" value="" placeholder="PW value" />
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="card mb-4 box-shadow">
+                            <div class="card-body">
+                                <p class="card-text">Control Pane</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="btn-group">
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="decode" onclick="Decode()">Start decoding</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="stopDecode" onclick="StopDecode()">Stop decoding</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <footer class="text-muted">
+        <div class="container">
+            <p>
+                <ul>
+                    <li><a href="https://github.com/YA-androidapp/BarcodeCli">YA-androidapp/BarcodeCli</a></li>
+                    <li><a href="http://eddiela.github.io/JOB">EddieLa/JOB</a></li>
+                </ul>
+            </p>
+            <p>
+                Copyright &copy; <script>document.write(new Date().getFullYear());</script> <a href="https://github.com/YA-androidapp/">YA-androidapp</a> All Rights Reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- -->
+
+    
+    
+
+    <hr />
+
+
+    <!-- -->
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+        crossorigin="anonymous"></script>
+
     <script src="js/JOB.js"></script>
     <script>
         var result = document.getElementById("Result");
@@ -29,6 +134,8 @@
                     tempArray.push(result[i].Format + " : " + result[i].Value);
                 }
                 Result.innerHTML = tempArray.join("<br />");
+
+                CallRest(result);
             }
         };
         JOB.SetLocalizationCallback(function (result) {
@@ -68,13 +175,13 @@
             navigator.msGetUserMedia);
         if (navigator.getUserMedia) {
             navigator.getUserMedia({
-                    video: {
-                        facingMode: {
-                            exact: "environment"
-                        }
-                    },
-                    audio: true
+                video: {
+                    facingMode: {
+                        exact: "environment"
+                    }
                 },
+                audio: true
+            },
                 function (localMediaStream) {
                     video.src = window.URL.createObjectURL(localMediaStream);
                     video.play();
@@ -84,11 +191,11 @@
                 function (err) {
                     if (err.toString().indexOf('OverconstrainedError') != -1) {
                         navigator.getUserMedia({
-                                video: true,
-                                audio: true
-                            },
+                            video: true,
+                            audio: true
+                        },
                             function (localMediaStream) {
-                                video.src = window.URL.createObjectURL(localMediaStream);
+                                video.srcObject = localMediaStream;
                                 video.play();
                                 draw();
                                 streaming = true;
@@ -132,13 +239,61 @@
                 }, 3000);
             }, 5000);
         }
-    </script>
 
-    <hr />
-    <ul>
-        <li><a href="https://github.com/YA-androidapp/BarcodeCli">YA-androidapp/BarcodeCli</a></li>
-        <li><a href="http://eddiela.github.io/JOB">EddieLa/JOB</a></li>
-    </ul>
+        function CallRest(result) {
+            var uri = document.getElementById("uri").value;
+            var idkey = document.getElementById("idkey").value;
+            var idval = document.getElementById("idval").value;
+            var pwkey = document.getElementById("pwkey").value;
+            var pwval = document.getElementById("pwval").value;
+
+            for (var i = 0; i < result.length; i++) {
+                console.log(result[i].Value);
+                var data = {};
+                data["code"] = result[i].Value;
+                data[idkey] = idval;
+                data[pwkey] = pwval;
+
+                ajax(uri, data);
+            }
+        }
+
+        function ajax(uri, data) {
+            var xmlHttpRequest = new XMLHttpRequest();
+            xmlHttpRequest.onreadystatechange = function () {
+                var READYSTATE_COMPLETED = 4;
+                var HTTP_STATUS_OK = 200;
+
+                if (this.readyState == READYSTATE_COMPLETED
+                    && this.status == HTTP_STATUS_OK) {
+                    // レスポンスの表示
+                    alert(this.responseText);
+                }
+            }
+            xmlHttpRequest.open('POST', uri);
+
+            // サーバに対して解析方法を指定する
+            xmlHttpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+            // データをリクエスト ボディに含めて送信する
+            xmlHttpRequest.send(EncodeHTMLForm(data));
+        }
+
+        function EncodeHTMLForm(data) {
+            var params = [];
+
+            for (var name in data) {
+                var value = data[name];
+                var param = encodeURIComponent(name) + '=' + encodeURIComponent(value);
+
+                params.push(param);
+            }
+
+            return params.join('&').replace(/%20/g, '+');
+        }
+
+
+    </script>
 </body>
 
 </html>
