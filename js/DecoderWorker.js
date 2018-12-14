@@ -2964,6 +2964,6 @@ if (typeof exports !== 'undefined') {
       exports = module.exports = decoderWorkerBlobString;
   }
   exports.decoderWorkerBlobString = decoderWorkerBlobString;
-} else {
-  root.decoderWorkerBlobString = decoderWorkerBlobString;
+// } else {
+//   root.decoderWorkerBlobString = decoderWorkerBlobString;
 }
