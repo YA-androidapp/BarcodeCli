@@ -2,7 +2,8 @@
 
     var debug = false;
 
-    var root = this;
+    // var root = this;
+    root = this;
 
     var EXIF = function (obj) {
         if (obj instanceof EXIF) return obj;

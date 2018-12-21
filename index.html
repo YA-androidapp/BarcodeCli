@@ -67,7 +67,11 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p id="Result"></p>
                                     <form>
+<<<<<<< HEAD
                                         <input type="text" id="url" name="url" value="url" placeholder="URL" />
+=======
+                                        <input type="text" id="uri" name="uri" value="" placeholder="URI" />
+>>>>>>> cb6627884a81844c5f12d8bb67bf784f33d47fae
                                         <input type="text" id="idkey" name="idkey" value="id" placeholder="ID key" />
                                         <input type="text" id="idval" name="idval" value="" placeholder="ID value" />
                                         <input type="text" id="pwkey" name="pwkey" value="pw" placeholder="PW key" />
@@ -84,8 +88,10 @@
                                 <span class="badge badge-pill badge-danger">Decoding</span>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="decode" onclick="Decode()">Start decoding</button>
-                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="stopDecode" onclick="StopDecode()">Stop decoding</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="decode"
+                                            onclick="Decode()">Start decoding</button>
+                                        <button type="button" class="btn btn-sm btn-outline-secondary" id="stopDecode"
+                                            onclick="StopDecode()">Stop decoding</button>
                                     </div>
                                 </div>
                             </div>
@@ -104,15 +110,17 @@
                 </ul>
             </p>
             <p>
-                Copyright &copy; <script>document.write(new Date().getFullYear());</script> <a href="https://github.com/YA-androidapp/">YA-androidapp</a> All Rights Reserved.
+                Copyright &copy; <script>
+                    document.write(new Date().getFullYear());
+                </script> <a href="https://github.com/YA-androidapp/">YA-androidapp</a> All Rights Reserved.
             </p>
         </div>
     </footer>
 
     <!-- -->
 
-    
-    
+
+
 
     <hr />
 
@@ -177,13 +185,13 @@
             navigator.msGetUserMedia);
         if (navigator.getUserMedia) {
             navigator.getUserMedia({
-                video: {
-                    facingMode: {
-                        exact: "environment"
-                    }
+                    video: {
+                        facingMode: {
+                            exact: "environment"
+                        }
+                    },
+                    audio: true
                 },
-                audio: true
-            },
                 function (localMediaStream) {
                     video.src = window.URL.createObjectURL(localMediaStream);
                     video.play();
@@ -193,9 +201,9 @@
                 function (err) {
                     if (err.toString().indexOf('OverconstrainedError') != -1) {
                         navigator.getUserMedia({
-                            video: true,
-                            audio: true
-                        },
+                                video: true,
+                                audio: true
+                            },
                             function (localMediaStream) {
                                 video.srcObject = localMediaStream;
                                 video.play();
@@ -216,6 +224,7 @@
         }
 
         function Decode() {
+            console.log('Decode()');
             if (!streaming) return;
             JOB.DecodeStream(video);
         }
@@ -224,10 +233,13 @@
         var intervalID = -1;
 
         function StopDecode() {
+            console.log('StopDecode()');
             // タイマーが有効であれば止める
             if (intervalID != -1) {
                 clearInterval(intervalID);
                 intervalID = -1;
+
+                JOB.StopStreamDecode();
                 return;
             }
         }
@@ -236,6 +248,7 @@
             // 5秒に1回、3秒間デコードする
             intervalID = setInterval(function () {
                 Decode();
+<<<<<<< HEAD
                 console.log("Decode()");
 
                 setTimeout(function () {
@@ -259,6 +272,12 @@
                 console.log("save url: "+url);
                 }
             }
+=======
+                //setTimeout(function () {
+                JOB.StopStreamDecode();
+                //}, 3000);
+            }, 5000);
+>>>>>>> cb6627884a81844c5f12d8bb67bf784f33d47fae
         }
 
         function CallRest(result) {
@@ -285,8 +304,8 @@
                 var READYSTATE_COMPLETED = 4;
                 var HTTP_STATUS_OK = 200;
 
-                if (this.readyState == READYSTATE_COMPLETED
-                    && this.status == HTTP_STATUS_OK) {
+                if (this.readyState == READYSTATE_COMPLETED &&
+                    this.status == HTTP_STATUS_OK) {
                     // レスポンスの表示
                     alert(this.responseText);
                 }
