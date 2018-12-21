@@ -67,6 +67,7 @@
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p id="Result"></p>
                                     <form>
+                                        <input type="text" id="url" name="url" value="url" placeholder="URL" />
                                         <input type="text" id="idkey" name="idkey" value="id" placeholder="ID key" />
                                         <input type="text" id="idval" name="idval" value="" placeholder="ID value" />
                                         <input type="text" id="pwkey" name="pwkey" value="pw" placeholder="PW key" />
@@ -80,6 +81,7 @@
                         <div class="card mb-4 box-shadow">
                             <div class="card-body">
                                 <p class="card-text">Control Pane</p>
+                                <span class="badge badge-pill badge-danger">Decoding</span>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <div class="btn-group">
                                         <button type="button" class="btn btn-sm btn-outline-secondary" id="decode" onclick="Decode()">Start decoding</button>
@@ -234,10 +236,29 @@
             // 5秒に1回、3秒間デコードする
             intervalID = setInterval(function () {
                 Decode();
+                console.log("Decode()");
+
                 setTimeout(function () {
                     JOB.StopStreamDecode();
-                }, 3000);
-            }, 5000);
+                    console.log("JOB.StopStreamDecode()");
+                }, 5000);
+            }, 10000);
+
+            // 状態保存
+            if(('localStorage' in window) && (window.localStorage !== null))
+            {
+                // 状態の読込
+                var url = localStorage.getItem('url');
+                document.getElementById("url").value = url;
+                console.log("load url: "+url);
+                
+                // 状態の書込
+                document.getElementById("url").onchange = function() {
+                    var url = document.getElementById("url").value;
+                    localStorage.setItem('url', url);
+                console.log("save url: "+url);
+                }
+            }
         }
 
         function CallRest(result) {
@@ -291,8 +312,6 @@
 
             return params.join('&').replace(/%20/g, '+');
         }
-
-
     </script>
 </body>
 
