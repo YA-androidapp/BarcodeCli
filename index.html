@@ -1,17 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
-
+<!-- ＵＴＦ８ -->
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Barcode</title>
 
-    <script src="js/exif.js" type="text/javascript"></script>
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-        crossorigin="anonymous">
+    <link
+        rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous" />
 </head>
 
 <body>
@@ -54,7 +55,7 @@
     <main role="main">
         <section class="jumbotron text-center">
             <div class="container">
-                <canvas id="videoCanvas" width="640" height="480"></canvas>
+                <canvas id="videoCanvas" width="320" height="240"></canvas>
             </div>
         </section>
         <div class="py-5 bg-light">
@@ -125,12 +126,11 @@
 
 
     <!-- -->
-
+    <script src="JOB.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
 
-    <script src="js/JOB.js"></script>
     <script>
         var result = document.getElementById("Result");
         JOB.Init();
@@ -192,7 +192,7 @@
                     audio: true
                 },
                 function (localMediaStream) {
-                    video.src = window.URL.createObjectURL(localMediaStream);
+                    video.srcObject = localMediaStream;
                     video.play();
                     draw();
                     streaming = true;
@@ -268,7 +268,6 @@
                 document.getElementById('idval').value = idval;
                 document.getElementById('pwkey').value = pwkey;
                 document.getElementById('pwval').value = pwval;
-                console.log('load url: ' + url);
 
                 // 状態の書込
                 document.getElementById('url').onchange = function () {
@@ -289,43 +288,48 @@
         }
 
         function CallRest(result) {
-            var uri = document.getElementById('uri').value;
-            var codekey = document.getElementById('codekey').value;
-            var idkey = document.getElementById('idkey').value;
-            var idval = document.getElementById('idval').value;
-            var pwkey = document.getElementById('pwkey').value;
-            var pwval = document.getElementById('pwval').value;
+            if(result.length > 0){
+                var url = document.getElementById('url').value;
+                var codekey = document.getElementById('codekey').value;
+                var idkey = document.getElementById('idkey').value;
+                var idval = document.getElementById('idval').value;
+                var pwkey = document.getElementById('pwkey').value;
+                var pwval = document.getElementById('pwval').value;
 
-            for (var i = 0; i < result.length; i++) {
-                console.log(result[i].Value);
-                var data = {};
-                data[codekey] = result[i].Value;
-                data[idkey] = idval;
-                data[pwkey] = pwval;
+                for (var i = 0; i < result.length; i++) {
+                    console.log(result[i].Value);
+                    var data = {};
+                    data[codekey] = result[i].Value;
+                    data[idkey] = idval;
+                    data[pwkey] = pwval;
 
-                ajax(uri, data);
+                    ajax(url, data);
+                }
             }
         }
 
-        function ajax(uri, data) {
-            var xmlHttpRequest = new XMLHttpRequest();
-            xmlHttpRequest.onreadystatechange = function () {
-                var READYSTATE_COMPLETED = 4;
-                var HTTP_STATUS_OK = 200;
+        function ajax(url, data) {
+            if(url && (data != null)){
+                var xmlHttpRequest = new XMLHttpRequest();
+                xmlHttpRequest.onreadystatechange = function () {
+                    var READYSTATE_COMPLETED = 4;
+                    var HTTP_STATUS_OK = 200;
 
-                if (this.readyState == READYSTATE_COMPLETED &&
-                    this.status == HTTP_STATUS_OK) {
-                    // レスポンスの表示
-                    alert(this.responseText);
+                    if (this.readyState == READYSTATE_COMPLETED &&
+                        this.status == HTTP_STATUS_OK) {
+                        // レスポンスの表示
+                        // alert(this.responseText);
+                        alert('Called');
+                    }
                 }
+                xmlHttpRequest.open('POST', url);
+
+                // サーバに対して解析方法を指定する
+                xmlHttpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+                // データをリクエスト ボディに含めて送信する
+                xmlHttpRequest.send(EncodeHTMLForm(data));
             }
-            xmlHttpRequest.open('POST', uri);
-
-            // サーバに対して解析方法を指定する
-            xmlHttpRequest.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-            // データをリクエスト ボディに含めて送信する
-            xmlHttpRequest.send(EncodeHTMLForm(data));
         }
 
         function EncodeHTMLForm(data) {
