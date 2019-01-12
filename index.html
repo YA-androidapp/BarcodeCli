@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <!-- ＵＴＦ８ -->
+
 <head>
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -8,10 +9,7 @@
 
     <title>Barcode</title>
 
-    <link
-        rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
         crossorigin="anonymous" />
 </head>
 
@@ -132,14 +130,17 @@
         crossorigin="anonymous"></script>
 
     <script>
+        console.log('script');
         var result = document.getElementById("Result");
         JOB.Init();
         var localized = [];
         var streaming = false;
         JOB.StreamCallback = function (result) {
+            console.log('StreamCallback');
             if (result.length > 0) {
                 var tempArray = [];
                 for (var i = 0; i < result.length; i++) {
+                    console.log('result[' + i + ']: ' + result[i].Format + " : " + result[i].Value);
                     tempArray.push(result[i].Format + " : " + result[i].Value);
                 }
                 Result.innerHTML = tempArray.join("<br />");
@@ -148,6 +149,7 @@
             }
         };
         JOB.SetLocalizationCallback(function (result) {
+            console.log('SetLocalizationCallback');
             localized = result;
         });
         JOB.SwitchLocalizationFeedback(true);
@@ -158,6 +160,7 @@
         video.height = 480;
 
         function draw() {
+            console.log('draw');
             try {
                 ctx.drawImage(video, 0, 0, c.width, c.height);
                 if (localized.length > 0) {
@@ -165,6 +168,7 @@
                     ctx.lineWIdth = "2";
                     ctx.strokeStyle = "red";
                     for (var i = 0; i < localized.length; i++) {
+                        console.log('localized[' + i + ']');
                         ctx.rect(localized[i].x, localized[i].y, localized[i].width, localized[i].height);
                     }
                     ctx.stroke();
@@ -183,6 +187,7 @@
             navigator.mozGetUserMedia ||
             navigator.msGetUserMedia);
         if (navigator.getUserMedia) {
+            console.log('navigator.getUserMedia');
             navigator.getUserMedia({
                     video: {
                         facingMode: {
@@ -192,6 +197,7 @@
                     audio: true
                 },
                 function (localMediaStream) {
+                    console.log('function (localMediaStream)');
                     video.srcObject = localMediaStream;
                     video.play();
                     draw();
@@ -210,20 +216,22 @@
                                 streaming = true;
                             },
                             function (err) {
-                                console.log("The following error occured: " + err);
+                                console.log('The following error occured: ' + err);
                             }
                         );
                     } else {
-                        console.log("The following error occured: " + err);
+                        console.log('The following error occured: ' + err);
                     }
                 }
             );
         } else {
-            console.log("getUserMedia not supported");
+            console.log('getUserMedia not supported');
         }
 
         function Decode() {
+            console.log('Decode');
             if (!streaming) return;
+            console.log('DecodeStream');
             JOB.DecodeStream(video);
         }
 
@@ -231,29 +239,31 @@
         var intervalID = -1;
 
         function StopDecode() {
-            // タイマーが有効であれば止める
-            if (intervalID != -1) {
-                clearInterval(intervalID);
-                intervalID = -1;
-                return;
-            }
+            console.log('StopDecode');
+            // // タイマーが有効であれば止める
+            // if (intervalID != -1) {
+            //     clearInterval(intervalID);
+            //     intervalID = -1;
+            //     return;
+            // }
         }
 
         window.onload = function () {
-            // 5秒に1回、3秒間デコードする
-            intervalID = setInterval(function () {
-                document.getElementById('decoding-badge').style.display = 'inline';
-                Decode();
-                console.log("Decode()");
+            console.log('window.onload');
+            // // 10 秒に1回、 5 秒間デコードする
+            // intervalID = setInterval(function () {
+            document.getElementById('decoding-badge').style.display = 'inline';
+            Decode();
 
-                setTimeout(function () {
-                    JOB.StopStreamDecode();
-                    document.getElementById('decoding-badge').style.display = 'none';
-                    console.log("JOB.StopStreamDecode()");
-                }, 5000);
-            }, 10000);
+            // setTimeout(function () {
+            //     JOB.StopStreamDecode();
+            //     document.getElementById('decoding-badge').style.display = 'none';
+            //     console.log('JOB.StopStreamDecode()');
+            // }, 5000);
+            // }, 10000);
 
             // 状態保存
+            console.log('状態保存');
             if (('localStorage' in window) && (window.localStorage !== null)) {
                 // 状態の読込
                 var url = localStorage.getItem('url');
@@ -288,7 +298,8 @@
         }
 
         function CallRest(result) {
-            if(result.length > 0){
+            console.log('CallRest');
+            if (result.length > 0) {
                 var url = document.getElementById('url').value;
                 var codekey = document.getElementById('codekey').value;
                 var idkey = document.getElementById('idkey').value;
@@ -309,7 +320,8 @@
         }
 
         function ajax(url, data) {
-            if(url && (data != null)){
+            console.log('ajax');
+            if (url && (data != null)) {
                 var xmlHttpRequest = new XMLHttpRequest();
                 xmlHttpRequest.onreadystatechange = function () {
                     var READYSTATE_COMPLETED = 4;
@@ -333,6 +345,7 @@
         }
 
         function EncodeHTMLForm(data) {
+            console.log('EncodeHTMLForm');
             var params = [];
 
             for (var name in data) {
