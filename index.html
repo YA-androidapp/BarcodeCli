@@ -65,14 +65,16 @@
                                 <p class="card-text">Parameter</p>
                                 <div class="d-flex justify-content-between align-items-center">
                                     <p id="Result"></p>
-                                    <form>
+                                    <div id="formdivs">
                                         <input type="text" id="url" name="url" value="url" placeholder="URL" />
                                         <input type="text" id="codekey" name="codekey" value="code" placeholder="Code key" />
                                         <input type="text" id="idkey" name="idkey" value="id" placeholder="ID key" />
                                         <input type="text" id="idval" name="idval" value="" placeholder="ID value" />
                                         <input type="text" id="pwkey" name="pwkey" value="pw" placeholder="PW key" />
                                         <input type="text" id="pwval" name="pwval" value="" placeholder="PW value" />
-                                    </form>
+                                        <input type="button" value="Append" id="btn-append" />
+                                        <input type="button" value="Remove" id="btn-remove" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -125,6 +127,7 @@
 
     <!-- -->
     <script src="JOB.js"></script>
+    <script src="form.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
         crossorigin="anonymous"></script>
@@ -313,6 +316,20 @@
                     data[codekey] = result[i].Value;
                     data[idkey] = idval;
                     data[pwkey] = pwval;
+
+                    var keys = document.getElementsByClassName("texts-key");
+                    for (var i = 0; i < keys.length; i++) {
+                        var ikey = String(keys[i].value);
+                        var ival = String(
+                            document.getElementById(
+                                keys[i].getAttribute("id").replace("key", "val")
+                            ).value
+                        );
+
+                        if (ikey != "" && ival != "") {
+                            data[ikey] = ival;
+                        }
+                    }
 
                     ajax(url, data);
                 }
