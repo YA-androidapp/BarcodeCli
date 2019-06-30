@@ -163,7 +163,7 @@
         video.height = 480;
 
         function draw() {
-            console.log('draw');
+            // console.log('draw');
             try {
                 ctx.drawImage(video, 0, 0, c.width, c.height);
                 if (localized.length > 0) {
@@ -171,7 +171,7 @@
                     ctx.lineWIdth = "2";
                     ctx.strokeStyle = "red";
                     for (var i = 0; i < localized.length; i++) {
-                        console.log('localized[' + i + ']');
+                        console.log(localized[i]);
                         ctx.rect(localized[i].x, localized[i].y, localized[i].width, localized[i].height);
                     }
                     ctx.stroke();
